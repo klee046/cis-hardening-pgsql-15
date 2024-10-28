@@ -1,0 +1,4 @@
+---
+- name: "SECTION | 1.2 | Ensure systemd Service Files Are Enabled"
+  ansible.builtin.import_tasks: cis_1_2.yml
+

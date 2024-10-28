@@ -1,0 +1,5 @@
+---
+- name: "PRELIM | Set variable for postgresql-server service name"
+  ansible.builtin.set_fact:
+      pg15cis_postgresql_service_default: "{{ (ansible_os_family == 'Debian') | ternary('postgresql', 'postgresql-15') }}"
+

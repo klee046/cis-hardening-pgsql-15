@@ -1,0 +1,30 @@
+---
+galaxy_info:
+  author: Sergejs Glusnevs
+  description: Postgres 15 Database Hardening with CIS Benchmarks v1.1.0 - 11-7-2023
+  company: SVA GmbH
+  license: MIT
+  role_name: kn-cis-pg-15
+  min_ansible_version: 2.1
+
+  platforms:
+   - name: EL
+     versions:
+     - "9"
+
+  galaxy_tags:
+     - system
+     - hardening
+     - security
+     - cis
+     - compliance
+     - rocky
+     - rheö
+     - redhat
+    
+  collections:
+      - community.general
+      - community.crypto
+      - ansible.posix
+
+  dependencies: []

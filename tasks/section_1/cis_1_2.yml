@@ -1,0 +1,12 @@
+---
+- name: "1.2 Ensure systemd Service Files Are Enabled"
+  ansible.builtin.service:
+      name: "{{ pg15cis_postgresql_service }}"
+      enabled: true
+  when:
+      - pg15cis_rule_1_2
+  tags:
+      - fix
+      - level_1
+      - rule_1_2
+

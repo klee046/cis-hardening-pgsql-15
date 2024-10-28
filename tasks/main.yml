@@ -1,0 +1,12 @@
+---
+- name: run preliminary tasks
+  ansible.builtin.import_tasks: prelim.yml
+
+# tasks file for kn-cis-pg-15
+- name: run CIS section 1 tasks
+  ansible.builtin.import_tasks: section_1/main.yml
+  when:
+      - pg15cis_section_1
+  tags:
+      - pg15cis_section_1
+

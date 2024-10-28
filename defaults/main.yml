@@ -1,0 +1,15 @@
+---
+# defaults file for kn-cis-pg-15
+#
+
+pg15cis_section_1: true
+
+# Section 1, Installation and Patches
+pg15cis_rule_1_2: true
+
+
+# pg15cis_postgresql_service is a variable for the name of the PostgreSQL service
+# The name postgresql-12 is a general default for RHEL based systems and posgresql for Ubuntu based systems
+# but this allows for customization of service name if needed. There is a prelim task to set this automatically to the default name
+
+pg15cis_postgresql_service: "{{ pg15cis_postgresql_service_default }}"
