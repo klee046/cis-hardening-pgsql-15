@@ -1,0 +1,12 @@
+- name: "3.1.2 | FIX |  Ensure the log destination is set correctly"
+  ansible.builtin.lineinfile:
+      path: "{{ pg15cis_config_file }}"
+      regexp: '^log_destination =|^#log_destination ='
+      line: "log_destination = '{{ pg15cis_log_destination }}'"
+  notify: restart postgresql
+  when:
+      - pg15cis_rule_3_1_2
+  tags:
+      - level_1
+      - fix
+      - rule_3_1_2

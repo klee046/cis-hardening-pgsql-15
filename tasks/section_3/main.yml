@@ -1,0 +1,5 @@
+---
+- name: "SECTION | 3.1.2 | Ensure the log destinations are set correctly"
+  ansible.builtin.import_tasks: cis_3_1_2.yml
+
+

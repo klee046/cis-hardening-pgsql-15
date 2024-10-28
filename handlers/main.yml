@@ -1,2 +1,7 @@
 ---
 # handlers file for kn-cis-pg-15
+- name: restart postgresql
+  ansible.builtin.service:
+      name: "{{ pg15cis_postgresql_service }}"
+      state: restarted
+
