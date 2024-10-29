@@ -2,3 +2,7 @@
 - name: "SECTION | 1.2 | Ensure systemd Service Files Are Enabled"
   ansible.builtin.import_tasks: cis_1_2.yml
 
+- name: "SECTION | 1.3 | Ensure Data Cluster Initialized Successfully"
+  ansible.builtin.import_tasks: cis_1_3.yml
+
+

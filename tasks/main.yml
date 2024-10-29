@@ -1,15 +1,24 @@
 ---
-- name: run preliminary tasks
+- name: preparation tasks
   become: true
   ansible.builtin.import_tasks: prelim.yml
 
-# tasks file for kn-cis-pg-15
+- name: include vars based on OS family
+  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
+
 - name: run CIS section 1 tasks
   ansible.builtin.import_tasks: section_1/main.yml
   when:
       - pg15cis_section_1
   tags:
       - pg15cis_section_1
+
+- name: run CIS section 2 tasks
+  ansible.builtin.import_tasks: section_2/main.yml
+  when:
+      - pg15cis_section_2
+  tags:
+      - pg15cis_section_2
 
 - name: run CIS section 3 tasks
   ansible.builtin.import_tasks: section_3/main.yml
