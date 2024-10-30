@@ -5,16 +5,64 @@
 pg15cis_section_1: true
 pg15cis_section_2: true
 pg15cis_section_3: true
+pg15cis_section_4: true
+pg15cis_section_6: true
+pg15cis_section_7: true
+pg15cis_section_8: true
 
 # Section 1, Installation and Patches
 pg15cis_rule_1_2: true
 pg15cis_rule_1_3: true
+
 #
 # Section 2, Directory and File Permissions
 pg15cis_rule_2_1: true
 
 # Section 3, Logging and Auditing
 pg15cis_rule_3_1_2: true
+pg15cis_rule_3_1_3: true
+pg15cis_rule_3_1_4: true
+pg15cis_rule_3_1_5: true
+pg15cis_rule_3_1_6: true
+pg15cis_rule_3_1_7: true
+pg15cis_rule_3_1_8: true
+pg15cis_rule_3_1_9: true
+pg15cis_rule_3_1_11: true
+pg15cis_rule_3_1_12: true
+pg15cis_rule_3_1_13: true
+pg15cis_rule_3_1_14: true
+pg15cis_rule_3_1_15: true
+pg15cis_rule_3_1_16: true
+pg15cis_rule_3_1_17: true
+pg15cis_rule_3_1_18: true
+pg15cis_rule_3_1_19: true
+pg15cis_rule_3_1_20: true
+pg15cis_rule_3_1_21: true
+pg15cis_rule_3_1_22: true
+pg15cis_rule_3_1_23: true
+pg15cis_rule_3_1_24: true
+pg15cis_rule_3_1_25: true
+pg15cis_rule_3_1_26: true
+pg15cis_rule_3_2: true
+
+# Section 4
+# User Access and Authorization
+pg15cis_rule_4_3: true
+pg15cis_rule_4_6: true
+
+# Section 6
+# PostgreSQL Settings
+pg15cis_rule_6_2: true
+pg15cis_rule_6_7: true
+pg15cis_rule_6_8: true
+
+# Section 7
+# Replication
+pg15cis_rule_7_4: true
+
+# Section 8
+# Special Configuration Considerations
+pg15cis_rule_8_2: true
 
 # postgres home directory
 pg15cis_pg15_usr_home_dir: "{{ pg15cis_pg15_usr_home_dir_get.stdout }}"
@@ -36,7 +84,7 @@ pg15cis_config_file: "{{ pg15cis_config_file_get.stdout }}"
 
 # Section 2
 # 2.1
-# pgs12cis_umask_value is the value for the PostgreSQL users umask settings
+# pg15cis_umask_value is the value for the PostgreSQL users umask settings
 # The value must be 0077 or more restrictive
 pg15cis_umask_value: "077"
 
