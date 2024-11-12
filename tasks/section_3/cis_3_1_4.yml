@@ -1,0 +1,30 @@
+- name: "3.1.4 Get Postgres log file destination directory"
+  ansible.builtin.shell: psql -t -c "show log_directory" | head -1 | xargs
+  changed_when: false
+  failed_when: pg15cis_postgres_log_directory_get.rc != 0
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_log_directory_get
+  when:
+      - pg15cis_rule_3_1_4
+  tags:
+      - level_1
+      - level_2
+      - get
+      - fix
+      - rule_3_1_4
+
+
+- name: "3.1.4 Ensure the log file destination directory is set correctly"
+  ansible.builtin.shell: psql -t -c "alter system set log_directory = '{{pg15cis_postgres_log_directory}}'"
+  changed_when: pg15cis_postgres_log_directory_get.stdout != pg15cis_postgres_log_directory
+  register: result
+  failed_when: result.rc != 0
+  become_user: "{{ pg15cis_postgres_user }}"
+  notify: pg_reload_conf
+  when:
+      - pg15cis_rule_3_1_4
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_3_1_4

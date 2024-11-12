@@ -1,13 +1,14 @@
 - name: "1.3 Ensure Data Cluster Initialized Successfully"
-  ansible.builtin.shell: "{{ pg15cis_1_3_db_initialize }}"
-  changed_when: '"Success" in pg15cis_1_3_db_initialize.stdout'
+  ansible.builtin.shell: "{{ pg15cis_postgres_db_initialize }}"
+  changed_when: '"Success" in pg15cis_postgres_db_initialize.stdout'
   failed_when: false
-  become_user: "{{ pg15cis_pgs_usr }}"
-  register: pg15cis_1_3_db_initialize
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_db_initialize
   when:
       - pg15cis_rule_1_3
   tags:
       - fix
       - level_1
+      - level_2
       - rule_1_3
 

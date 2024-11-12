@@ -1,12 +1,30 @@
-- name: "3.1.2 | FIX |  Ensure the log destination is set correctly"
-  ansible.builtin.lineinfile:
-      path: "{{ pg15cis_config_file }}"
-      regexp: '^log_destination =|^#log_destination ='
-      line: "log_destination = '{{ pg15cis_log_destination }}'"
-  notify: restart postgresql
+- name: "3.1.2 Get log destination currently set"
+  ansible.builtin.shell: psql -t -c "show log_destination" | head -1 | xargs
+  changed_when: false
+  failed_when: pg15cis_postgres_log_destination_get.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_log_destination_get
   when:
       - pg15cis_rule_3_1_2
   tags:
       - level_1
+      - level_2
+      - get
+      - fix
+      - rule_3_1_2
+
+
+- name: "3.1.2 Ensure the log destination is set correctly"
+  ansible.builtin.shell: psql -t -c "alter system set log_destination = '{{pg15cis_log_destination}}'"
+  changed_when: pg15cis_postgres_log_destination_get.stdout != pg15cis_log_destination
+  register: result
+  failed_when: result.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  notify: pg_reload_conf
+  when:
+      - pg15cis_rule_3_1_2
+  tags:
+      - level_1
+      - level_2
       - fix
       - rule_3_1_2

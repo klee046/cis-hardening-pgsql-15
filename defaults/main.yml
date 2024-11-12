@@ -75,8 +75,8 @@ pg15cis_pg15_usr_home_dir: "{{ pg15cis_pg15_usr_home_dir_get.stdout }}"
 pg15cis_postgresql_service: "{{ pg15cis_postgresql_service_default }}"
 
 # Role vars - Global
-# pg15cis_pgs_usr is the configured postgres user
-pg15cis_pgs_usr: postgres
+# pg15cis_postgres_user is the configured postgres user
+pg15cis_postgres_user: postgres
 
 # pg15cis_config_file_get is the location of the postgresql.config file
 # This is gathered from a prelim task

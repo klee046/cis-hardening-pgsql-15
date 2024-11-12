@@ -2,24 +2,27 @@
 - name: "PRELIM | Set variable for postgresql-server service name"
   ansible.builtin.set_fact:
       pg15cis_postgresql_service_default: "{{ (ansible_os_family == 'Debian') | ternary('postgresql', 'postgresql-15') }}"
+  tags: always
 
 - name: "PRELIM | Get postgres config file path"
   ansible.builtin.shell: psql -U postgres -c 'SHOW config_file' | tail -n+3 | head -n 1 | cut -c2-
   changed_when: false
   failed_when: false
-  become_user: "{{ pg15cis_pgs_usr }}"
+  become_user: "{{ pg15cis_postgres_user }}"
   register: pg15cis_config_file_get
-
-- name: Print debug information on demand
-  ansible.builtin.debug:
-    var: pg15cis_1_3_db_initialize
-    verbosity: 1
+  tags: always
 
 - name: "Get postgresql user home folder"
-  ansible.builtin.shell: "grep {{ pg15cis_pgs_usr }} /etc/passwd | cut -f6 -d:"
+  ansible.builtin.shell: "grep {{ pg15cis_postgres_user }} /etc/passwd | cut -f6 -d:"
   changed_when: false
   failed_when: false
   register: pg15cis_pg15_usr_home_dir_get
   when:
       - pg15cis_rule_2_1
+  tags: always
+
+- name: Check Postgresql Default Service Name
+  ansible.builtin.debug:
+    msg: "Postgresql default servcixe name: {{ pg15cis_postgresql_service_default }}"
+  tags: always
 

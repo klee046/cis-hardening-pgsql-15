@@ -2,4 +2,23 @@
 - name: "SECTION | 3.1.2 | Ensure the log destinations are set correctly"
   ansible.builtin.import_tasks: cis_3_1_2.yml
 
+- name: "SECTION | 3.1.3 | Ensure the logging collector is enabled"
+  ansible.builtin.import_tasks: cis_3_1_3.yml
 
+- name: "SECTION | 3.1.4 | Ensure the log file destination directory is set correctly"
+  ansible.builtin.import_tasks: cis_3_1_4.yml
+
+- name: "SECTION | 3.1.5 | Ensure the filename pattern for log files is set correctly"
+  ansible.builtin.import_tasks: cis_3_1_5.yml
+
+- name: "SECTION | 3.1.6 | Ensure the log file permissions are set correctly"
+  ansible.builtin.import_tasks: cis_3_1_6.yml
+
+- name: "SECTION | 3.1.7 | Ensure 'log_truncate_on_rotation' is enabled"
+  ansible.builtin.import_tasks: cis_3_1_7.yml
+
+- name: "SECTION | 3.1.8 | Ensure the maximum log file lifetime is set correctly"
+  ansible.builtin.import_tasks: cis_3_1_8.yml
+
+- name: "SECTION | 3.1.9 | Ensure the maximum log file size is set correctly"
+  ansible.builtin.import_tasks: cis_3_1_9.yml

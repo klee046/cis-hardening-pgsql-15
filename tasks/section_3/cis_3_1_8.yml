@@ -1,0 +1,30 @@
+- name: "3.1.8 Get current maximum log file lifetime"
+  ansible.builtin.shell: psql -t -c "show log_rotation_age" | head -1 | xargs
+  changed_when: false
+  failed_when: pg15cis_postgres_log_rotation_age_get.rc != 0
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_log_rotation_age_get
+  when:
+      - pg15cis_rule_3_1_8
+  tags:
+      - level_1
+      - level_2
+      - get
+      - fix
+      - rule_3_1_8
+
+
+- name: "3.1.8 Ensure the maximum log file lifetime is set correctly"
+  ansible.builtin.shell: psql -t -c "alter system set log_rotation_age = '{{pg15cis_postgres_log_rotation_age}}'"
+  changed_when: pg15cis_postgres_log_rotation_age_get.stdout != pg15cis_postgres_log_rotation_age
+  register: result
+  failed_when: result.rc != 0
+  become_user: "{{ pg15cis_postgres_user }}"
+  notify: pg_reload_conf
+  when:
+      - pg15cis_rule_3_1_8
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_3_1_8

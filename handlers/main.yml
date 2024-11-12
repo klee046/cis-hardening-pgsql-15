@@ -5,3 +5,7 @@
       name: "{{ pg15cis_postgresql_service }}"
       state: restarted
 
+- name: pg_reload_conf
+  ansible.builtin.shell: psql -t -c "select pg_reload_conf()"
+  become_user: "{{ pg15cis_postgres_user }}"
+

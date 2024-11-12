@@ -1,0 +1,30 @@
+- name: "3.1.6 Get current log file permissions"
+  ansible.builtin.shell: psql -t -c "show log_file_mode" | head -1 | xargs
+  changed_when: false
+  failed_when: pg15cis_postgres_log_file_mode_get.rc != 0
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_log_file_mode_get
+  when:
+      - pg15cis_rule_3_1_6
+  tags:
+      - level_1
+      - level_2
+      - get
+      - fix
+      - rule_3_1_6
+
+
+- name: "3.1.6 Ensure the log file permissions are set correctly"
+  ansible.builtin.shell: psql -t -c "alter system set log_file_mode = '{{pg15cis_postgres_log_file_mode}}'"
+  changed_when: pg15cis_postgres_log_file_mode_get.stdout != pg15cis_postgres_log_file_mode
+  register: result
+  failed_when: result.rc != 0
+  become_user: "{{ pg15cis_postgres_user }}"
+  notify: pg_reload_conf
+  when:
+      - pg15cis_rule_3_1_6
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_3_1_6
