@@ -61,36 +61,60 @@ pg15cis_rule_6_8: true
 pg15cis_rule_7_4: true
 
 # Section 8
+
 # Special Configuration Considerations
 pg15cis_rule_8_2: true
 
-# postgres home directory
-pg15cis_pg15_usr_home_dir: "{{ pg15cis_pg15_usr_home_dir_get.stdout }}"
-
-
-# pg15cis_postgresql_service is a variable for the name of the PostgreSQL service
-# The name postgresql-15 is a general default for RHEL based systems and posgresql for Ubuntu based systems
-# but this allows for customization of service name if needed. There is a prelim task to set this automatically to the default name
-
-pg15cis_postgresql_service: "{{ pg15cis_postgresql_service_default }}"
-
+###########
 # Role vars - Global
-# pg15cis_postgres_user is the configured postgres user
-pg15cis_postgres_user: postgres
 
-# pg15cis_config_file_get is the location of the postgresql.config file
-# This is gathered from a prelim task
+# The configured postgres system user
+pg15cis_postgres_user: postgres
+pg15cis_postgres_group: postgres
+
+# The location of the postgresql.config file, is gathered from a prelim task by default
 pg15cis_config_file: "{{ pg15cis_config_file_get.stdout }}"
 
+###########
+# Section 1
+# 1.2
+
+# The variable for the name of the PostgreSQL service, is gathered from a prelim task by default
+pg15cis_postgresql_service: "{{ pg15cis_postgresql_service_default }}"
+
+###########
 # Section 2
 # 2.1
-# pg15cis_umask_value is the value for the PostgreSQL users umask settings
-# The value must be 0077 or more restrictive
+
+# Value for the PostgreSQL user umask settings, must be 0077 or more restrictive
 pg15cis_umask_value: "077"
 
+# Flag value indicating ansible won't create profile environment file unless none exists
+pg15cis_2_1_env_file_found: False
+
+
+# PostgreSQL home directory, this is gathered from a prelim task
+pg15cis_pg15_usr_home_dir: "{{ pg15cis_pg15_usr_home_dir_get.stdout }}"
+
+###########
 # Section 3
 # 3.1.2
-# pg15cis_log_destination is the log destination configured for PostgreSQL
 # PostgreSQL supports several methods for logging server messages, including stderr, csvlog and syslog
 pg15cis_log_destination: syslog
+
+# 3.1.7
+# Ensure 'log_truncate_on_rotation' is enabled
+pg15cis_postgres_log_truncate_on_rotation: 'on'
+
+# 3.2
+# pg15cis_shared_preload_libraries are the shared pre-load libraries
+# The value for this variable must list pgaudit, but can have more items and will be comma separated list with no space between items
+# Example for multiple items pg15cis_shared_preload_libraries: pgaudit,somethingelse
+pg15cis_shared_preload_libraries: pgaudit
+
+# pg15cis_pgaudit_log_types are the pgaudit log types that will be logged
+# The options are READ, WRITE, FUNCTION, ROLE, DDL, and MISC. You can also have multiple types listed and separated by a comma with no spaces
+# Example pg15cis_pgaudit_log_types: ddl,write
+pg15cis_pgaudit_log_types: ddl,write
+
 

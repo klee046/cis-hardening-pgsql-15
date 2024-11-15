@@ -1,7 +1,7 @@
-- name: "3.1.5 Get current filename pattern for log files"
+- name: "GET | 3.1.5 Get current filename pattern for log files"
   ansible.builtin.shell: psql -t -c "show log_filename" | head -1 | xargs
   changed_when: false
-  failed_when: pg15cis_postgres_log_filename_get.rc != 0
+  failed_when: pg15cis_postgres_log_filename_get.sterr
   become_user: "{{ pg15cis_postgres_user }}"
   register: pg15cis_postgres_log_filename_get
   when:
@@ -14,11 +14,11 @@
       - rule_3_1_5
 
 
-- name: "3.1.5 Ensure the filename pattern for log files is set correctly"
+- name: "FIX | 3.1.5 Ensure the filename pattern for log files is set correctly"
   ansible.builtin.shell: psql -t -c "alter system set log_filename = '{{pg15cis_postgres_log_filename}}'"
   changed_when: pg15cis_postgres_log_filename_get.stdout != pg15cis_postgres_log_filename
   register: result
-  failed_when: result.rc != 0
+  failed_when: result.stderr
   become_user: "{{ pg15cis_postgres_user }}"
   notify: pg_reload_conf
   when:

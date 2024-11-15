@@ -1,0 +1,31 @@
+---
+# Section 2
+# Directory and File Permissions
+- name: "TASK | 2.1  Ensure the file permissions mask is correct"
+  block:
+    - name: "GET | 2.1 Get user environment file from list of preset files"
+      ansible.builtin.shell: ls -a "{{ pg15cis_pg15_usr_home_dir }}" | grep -e "^{{ item }}$"
+      changed_when: false
+      failed_when: false
+      register: pg15cis_2_1_env_file
+
+    - name: "FIX | 2.1 Ensure the file permissions mask is correct: set umask"
+      ansible.builtin.lineinfile:
+          path: "{{ pg15cis_pg15_usr_home_dir }}/{{ pg15cis_2_1_env_file.stdout }}"
+          regexp: '^umask|^UMASK'
+          line: "umask 0{{ pg15cis_umask_value }}"
+      when: pg15cis_2_1_env_file.stdout
+
+    - name: "SET | 2.1 Set a flag to show that at least one environment file is found"
+      set_fact:
+        pg15cis_2_1_env_file_found: True
+      when: pg15cis_2_1_env_file.stdout
+
+  when:
+      - pg15cis_rule_2_1
+  tags:
+      - fix
+      - level_1
+      - level_2
+      - rule_2_1
+

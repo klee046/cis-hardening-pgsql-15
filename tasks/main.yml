@@ -1,11 +1,6 @@
 ---
-- name: Preparation Tasks
-  become: true
+- name: Preliminary Tasks
   ansible.builtin.import_tasks: prelim.yml
-
-- name: Include Vars Based on OS Family
-  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
-  tags: always
 
 - name: Run CIS Section 1 Tasks
   ansible.builtin.import_tasks: section_1/main.yml

@@ -12,17 +12,19 @@
   register: pg15cis_config_file_get
   tags: always
 
-- name: "Get postgresql user home folder"
+- name: "PRELIM | Get postgresql user home folder"
   ansible.builtin.shell: "grep {{ pg15cis_postgres_user }} /etc/passwd | cut -f6 -d:"
   changed_when: false
   failed_when: false
   register: pg15cis_pg15_usr_home_dir_get
-  when:
-      - pg15cis_rule_2_1
   tags: always
 
-- name: Check Postgresql Default Service Name
+- name: "PRELIM | Check Postgresql Default Service Name"
   ansible.builtin.debug:
     msg: "Postgresql default servcixe name: {{ pg15cis_postgresql_service_default }}"
+  tags: always
+
+- name: "PRELIM | Include Vars Based on OS Family"
+  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
   tags: always
 

@@ -16,6 +16,11 @@ get_postgres_binary_list: "dnf info $(rpm -qa|grep postgres) | grep -E '^Name|^V
 pg15cis_postgres_db_initialize: 'PGSETUP_INITDB_OPTIONS="-k" /usr/pgsql-15/bin/postgresql-15-setup initdb'
 
 ################### Section 2
+# 2.1 Ensure the file permissions mask is correct
+pg15cis_postgres_umask_source_filenames:
+  - .bashrc
+  - .bash_profile
+  - .profile
 
 ################### Section 3
 #
@@ -29,9 +34,6 @@ pg15cis_postgres_log_filename: "postgresql-%a.log"
 # 3.1.6 Log files mode
 pg15cis_postgres_log_file_mode: "0600"
 
-# 3.1.7 Ensure 'log_truncate_on_rotation' is enabled
-pg15cis_postgres_log_truncate_on_rotation: on
-
 # 3.1.8 Ensure the maximum log file lifetime is set correctly
 pg15cis_postgres_log_rotation_age: "1d"
 
@@ -41,4 +43,4 @@ pg15cis_postgres_log_rotation_size: "1GB"
 
 # 3.2
 # pg15cis_3_2_pgaudit_install is the package to install pgAudit to ensure the PostgreSQL Audit Extension (pgAudit) is enabled.
-pg15cis_3_2_pgaudit_install: "pgaudit14_12"
+pg15cis_pgaudit_install: "pgaudit17_15"

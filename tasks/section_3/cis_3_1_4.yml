@@ -1,7 +1,7 @@
-- name: "3.1.4 Get Postgres log file destination directory"
+- name: "GET | 3.1.4 Get Postgres log file destination directory"
   ansible.builtin.shell: psql -t -c "show log_directory" | head -1 | xargs
   changed_when: false
-  failed_when: pg15cis_postgres_log_directory_get.rc != 0
+  failed_when: pg15cis_postgres_log_directory_get.stderr 
   become_user: "{{ pg15cis_postgres_user }}"
   register: pg15cis_postgres_log_directory_get
   when:
@@ -18,7 +18,7 @@
   ansible.builtin.shell: psql -t -c "alter system set log_directory = '{{pg15cis_postgres_log_directory}}'"
   changed_when: pg15cis_postgres_log_directory_get.stdout != pg15cis_postgres_log_directory
   register: result
-  failed_when: result.rc != 0
+  failed_when: result.stderr
   become_user: "{{ pg15cis_postgres_user }}"
   notify: pg_reload_conf
   when:

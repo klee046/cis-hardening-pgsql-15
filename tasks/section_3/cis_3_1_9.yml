@@ -1,7 +1,7 @@
-- name: "3.1.9 Get current maximum log file size"
+- name: "GET | 3.1.9 Get current maximum log file size"
   ansible.builtin.shell: psql -t -c "show log_rotation_size" | head -1 | xargs
   changed_when: false
-  failed_when: pg15cis_postgres_log_rotation_size_get.rc != 0
+  failed_when: pg15cis_postgres_log_rotation_size_get.stderr
   become_user: "{{ pg15cis_postgres_user }}"
   register: pg15cis_postgres_log_rotation_size_get
   when:
@@ -14,11 +14,11 @@
       - rule_3_1_9
 
 
-- name: "3.1.9 Ensure the maximum log file size is set correctly"
+- name: "FIX | 3.1.9 Ensure the maximum log file size is set correctly"
   ansible.builtin.shell: psql -t -c "alter system set log_rotation_size = '{{pg15cis_postgres_log_rotation_size}}'"
   changed_when: pg15cis_postgres_log_rotation_size_get.stdout != pg15cis_postgres_log_rotation_size
   register: result
-  failed_when: result.rc != 0
+  failed_when: result.stderr
   become_user: "{{ pg15cis_postgres_user }}"
   notify: pg_reload_conf
   when:

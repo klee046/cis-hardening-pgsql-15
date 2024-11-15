@@ -1,0 +1,43 @@
+---
+- name: "TASK | 3.2 Ensure the PostgreSQL Audit Extension (pgAudit) is enabled"
+
+  block:
+    - name: "GET | 3.2 Get shared_preload_libraries status"
+      ansible.builtin.shell: psql -t -c "show shared_preload_libraries" | head -1 | xargs
+      register: pg15cis_postgres_shared_preload_libraries_get
+      failed_when: pg15cis_postgres_shared_preload_libraries_get.stderr
+      changed_when: not pg15cis_postgres_shared_preload_libraries_get.stdout
+      become_user: "{{ pg15cis_postgres_user }}"
+
+    - name: "GET | 3.2 Ensure the PostgreSQL Audit Extension (pgAudit) is enabled"
+      ansible.builtin.shell: psql -t -c "show pgaudit.log"
+      register: pg15cis_postgres_pgaudit_enabled
+      failed_when: pg15cis_postgres_pgaudit_enabled.stderr
+      changed_when: not pg15cis_postgres_pgaudit_enabled.stdout
+      become_user: "{{ pg15cis_postgres_user }}"
+      notify: pg_reload_conf
+
+    - name: "FIX | 3.2 | Ensure the PostgreSQL Audit Extension (pgAudit) is isntalled"
+      ansible.builtin.package:
+          name: "{{ pg15cis_pgaudit_install }}"
+          state: present
+
+    - name: "FIX | 3.2 | Ensure the PostgreSQL Audit Extension (pgAudit) is enabled"
+      ansible.builtin.lineinfile:
+          path: "{{ pg15cis_config_file }}"
+          regexp: "{{ item.regexp }}"
+          line: "{{ item.line }}"
+          insertafter: "{{ item.insertafter }}"
+      notify: restart postgresql
+      with_items:
+          - { regexp: '^shared_preload_libraries =|^#shared_preload_libraries =', line: "shared_preload_libraries = '{{ pg15cis_shared_preload_libraries }}'", insertafter: EOF }
+          - { regexp: '^# pgaudit.log settings', line: '# pgaudit.log settings', insertafter: EOF }
+          - { regexp: '^pgaudit.log=', line: "pgaudit.log='{{ pg15cis_pgaudit_log_types  }}'", insertafter: '# pgaudit.log settings'}
+
+  when:
+      - pg15cis_rule_3_2
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_3_2

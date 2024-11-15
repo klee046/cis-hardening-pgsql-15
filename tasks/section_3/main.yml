@@ -22,3 +22,6 @@
 
 - name: "SECTION | 3.1.9 | Ensure the maximum log file size is set correctly"
   ansible.builtin.import_tasks: cis_3_1_9.yml
+
+- name: "SECTION | 3.2 | Ensure the PostgreSQL Audit Extension (pgAudit) is enabled"
+  ansible.builtin.import_tasks: cis_3_2.yml

@@ -1,29 +1,28 @@
 ---
 # Section 2
 # Directory and File Permissions
-- name: "2.1 Ensure the file permissions mask is correct"
-  block:
-      - name: "2.1 Ensure the file permissions mask is correct | Get user environment file (.bashrc, .bash_profile, or .profile}"
-        ansible.builtin.shell: ls -a "{{ pg15cis_pg15_usr_home_dir }}" | grep -e '.bashrc\|.bash_profile\|.profile'
-        changed_when: false
-        failed_when: false
-        register: pg15cis_2_1_env_file
-
-      - name: "2.1 Ensure the file permissions mask is correct | Set umask"
-        ansible.builtin.lineinfile:
-            path: "{{ pg15cis_pg15_usr_home_dir }}/{{ pg15cis_2_1_env_file.stdout }}"
-            regexp: '^umask|^UMASK'
-            line: "umask 0{{ pg15cis_umask_value }}"
-        when: pg15cis_2_1_env_file.stdout != ""
-
-      - name: "2.1 Ensure the file permissions mask is correct | Set umask if file doesn't exist"
-        ansible.builtin.lineinfile:
-            path: "{{ pg15cis_pg15_usr_home_dir }}/.bashrc"
-            line: "umask 0{{ pg15cis_umask_value }}"
-            create: true
-        when: pg15cis_2_1_env_file.stdout == ""
+- name: "FIX | 2.1 Ensure the file permissions mask is correct"
+  include_tasks: cis_2_1_subtack.yml
+  loop: "{{pg15cis_postgres_umask_source_filenames}}"
   when:
       - pg15cis_rule_2_1
+  tags:
+      - fix
+      - level_1
+      - level_2
+      - rule_2_1
+
+- name: "FIX | 2.1 Ensure the file permissions mask is correct: create environemnt file since is abent"
+  ansible.builtin.lineinfile:
+      path: "{{ pg15cis_pg15_usr_home_dir }}/.bashrc"
+      line: "umask 0{{ pg15cis_umask_value }}"
+      create: true
+      owner: "{{pg15cis_postgres_user}}"
+      group: "{{pg15cis_postgres_group}}"
+      mode: 0700
+  when:
+      - pg15cis_rule_2_1
+      - not pg15cis_2_1_env_file_found
   tags:
       - fix
       - level_1
