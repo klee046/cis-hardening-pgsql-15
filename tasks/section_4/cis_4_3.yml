@@ -1,0 +1,32 @@
+---
+- name: "TASK | 4.3 Ensure excessive function privileges are revoked"
+
+  block:
+    - name: "GET | 4.3 Ensure excessive function privileges are revoked"
+      ansible.builtin.shell: psql -t -c "SELECT nspname, proname, proargtypes, prosecdef, rolname, proconfig FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid JOIN pg_authid a ON a.oid = p.proowner WHERE prosecdef OR NOT proconfig IS NULL"
+      register: pg15cis_security_definer
+      failed_when: pg15cis_security_definer.stderr
+      changed_when: false
+      become_user: "{{ pg15cis_postgres_user }}"
+
+    - name: "GET | 4.3 | Ensure excessive function privileges are revoked"
+      ansible.builtin.debug:
+          msg:
+              - "Warning!! Please review the list below and confirm all results should have Security Definer status. This is a manual task."
+              - "When possible revoke Security Definer, Security Invoker is another option that is valid to use."
+              - "{{ pg15cis_security_definer.stdout_lines }}"
+
+    - name: "GET | 4.3 | Collect warnings"
+      ansible.builtin.import_tasks: collect_cis_warnings.yml
+      when: not pg15cis_security_definer.stdout
+
+  vars:
+      warn_control_id: '4.3'
+
+  when:
+      - pg15cis_rule_4_3
+  tags:
+      - level_1
+      - level_2
+      - get
+      - rule_4_3

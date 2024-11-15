@@ -1,2 +1,6 @@
 ---
 # vars file for kn-cis-pg-15
+#
+# This global variable gathers list of warnings during role run that need atention
+warn_control_list: ""
+warn_count: 0

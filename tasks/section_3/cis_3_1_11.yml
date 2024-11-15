@@ -1,0 +1,30 @@
+- name: "GET | 3.1.11 Get current syslog messages are not suppressed status"
+  ansible.builtin.shell: psql -t -c "show syslog_sequence_numbers" | head -1 | xargs
+  changed_when: false
+  failed_when: pg15cis_postgres_syslog_sequence_numbers_get.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_syslog_sequence_numbers_get
+  when:
+      - pg15cis_rule_3_1_11
+  tags:
+      - level_1
+      - level_2
+      - get
+      - fix
+      - rule_3_1_11
+
+
+- name: "FIX | 3.1.11 Ensure syslog messages are not suppressed"
+  ansible.builtin.shell: psql -t -c "alter system set syslog_sequence_numbers = 'on'"
+  changed_when: pg15cis_postgres_syslog_sequence_numbers_get.stdout != 'on'
+  register: result
+  failed_when: result.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  notify: pg_reload_conf
+  when:
+      - pg15cis_rule_3_1_11
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_3_1_11

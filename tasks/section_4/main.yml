@@ -1,0 +1,3 @@
+---
+- name: "SECTION | 4.3 | Ensure excessive function privileges are revoked"
+  ansible.builtin.import_tasks: cis_4_3.yml
