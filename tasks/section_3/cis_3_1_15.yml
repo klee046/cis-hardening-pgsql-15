@@ -1,0 +1,30 @@
+- name: "GET | 3.1.15 Get current SQL statements generating errors are recorded setting"
+  ansible.builtin.shell: psql -t -c "show log_min_error_statement" | head -1 | xargs
+  changed_when: false
+  failed_when: pg15cis_postgres_log_min_error_statement_get.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_log_min_error_statement_get
+  when:
+      - pg15cis_rule_3_1_15
+  tags:
+      - level_1
+      - level_2
+      - get
+      - fix
+      - rule_3_1_15
+
+
+- name: "FIX | 3.1.15 Ensure the correct SQL statements generating errors are recorded"
+  ansible.builtin.shell: psql -t -c "alter system set log_min_error_statement = '{{pg15cis_log_min_error_statement}}'"
+  changed_when: pg15cis_postgres_log_min_error_statement_get.stdout != pg15cis_log_min_error_statement
+  register: result
+  failed_when: result.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  notify: pg_reload_conf
+  when:
+      - pg15cis_rule_3_1_15
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_3_1_15

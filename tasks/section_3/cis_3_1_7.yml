@@ -15,8 +15,8 @@
 
 
 - name: "FIX | 3.1.7 Ensure the log file permissions are set correctly"
-  ansible.builtin.shell: psql -t -c "alter system set log_truncate_on_rotation = '{{pg15cis_postgres_log_truncate_on_rotation}}'"
-  changed_when: pg15cis_postgres_log_truncate_on_rotation_get.stdout != pg15cis_postgres_log_truncate_on_rotation
+  ansible.builtin.shell: psql -t -c "alter system set log_truncate_on_rotation = '{{pg15cis_log_truncate_on_rotation}}'"
+  changed_when: pg15cis_postgres_log_truncate_on_rotation_get.stdout != pg15cis_log_truncate_on_rotation
   register: result
   failed_when: result.stderr
   become_user: "{{ pg15cis_postgres_user }}"

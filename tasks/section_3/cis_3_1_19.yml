@@ -1,0 +1,30 @@
+- name: "GET | 3.1.19 Get current 'debug_pretty_print' setting"
+  ansible.builtin.shell: psql -t -c "show debug_pretty_print" | head -1 | xargs
+  changed_when: false
+  failed_when: pg15cis_postgres_debug_pretty_print_get.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_debug_pretty_print_get
+  when:
+      - pg15cis_rule_3_1_19
+  tags:
+      - level_1
+      - level_2
+      - get
+      - fix
+      - rule_3_1_19
+
+
+- name: "FIX | 3.1.19 Ensure 'debug_pretty_print' is disabled"
+  ansible.builtin.shell: psql -t -c "alter system set debug_pretty_print = 'off'"
+  changed_when: pg15cis_postgres_debug_pretty_print_get.stdout != 'off'
+  register: result
+  failed_when: result.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  notify: pg_reload_conf
+  when:
+      - pg15cis_rule_3_1_19
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_3_1_19

@@ -1,0 +1,30 @@
+- name: "GET | 3.1.13 Get current program name for PostgreSQL syslog messages"
+  ansible.builtin.shell: psql -t -c "show syslog_ident" | head -1 | xargs
+  changed_when: false
+  failed_when: pg15cis_postgres_syslog_ident_get.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_syslog_ident_get
+  when:
+      - pg15cis_rule_3_1_13
+  tags:
+      - level_1
+      - level_2
+      - get
+      - fix
+      - rule_3_1_13
+
+
+- name: "FIX | 3.1.13 Ensure the program name for PostgreSQL syslog messages is correct"
+  ansible.builtin.shell: psql -t -c "alter system set syslog_ident = '{{pg15cis_syslog_ident}}'"
+  changed_when: pg15cis_postgres_syslog_ident_get.stdout != pg15cis_syslog_ident
+  register: result
+  failed_when: result.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  notify: pg_reload_conf
+  when:
+      - pg15cis_rule_3_1_13
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_3_1_13

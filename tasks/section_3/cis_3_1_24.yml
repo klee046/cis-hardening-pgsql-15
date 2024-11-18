@@ -1,0 +1,30 @@
+- name: "GET | 3.1.24 Get current 'log_line_prefix' setting"
+  ansible.builtin.shell: psql -t -c "show log_line_prefix" | head -1 | xargs
+  changed_when: false
+  failed_when: pg15cis_postgres_log_line_prefix_get.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_log_line_prefix_get
+  when:
+      - pg15cis_rule_3_1_24
+  tags:
+      - level_1
+      - level_2
+      - get
+      - fix
+      - rule_3_1_24
+
+
+- name: "FIX | 3.1.24 Ensure 'log_line_prefix' is set correctly"
+  ansible.builtin.shell: psql -t -c "alter system set log_line_prefix = '{{pg15cis_log_line_prefix}}'"
+  changed_when: pg15cis_postgres_log_line_prefix_get.stdout != pg15cis_log_line_prefix
+  register: result
+  failed_when: result.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  notify: pg_reload_conf
+  when:
+      - pg15cis_rule_3_1_24
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_3_1_24

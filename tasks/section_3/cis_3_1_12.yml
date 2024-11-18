@@ -1,0 +1,30 @@
+- name: "GET | 3.1.12 Get current syslog messages are not lost due to size"
+  ansible.builtin.shell: psql -t -c "show syslog_split_messages" | head -1 | xargs
+  changed_when: false
+  failed_when: pg15cis_postgres_syslog_split_messages_get.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_syslog_split_messages_get
+  when:
+      - pg15cis_rule_3_1_12
+  tags:
+      - level_1
+      - level_2
+      - get
+      - fix
+      - rule_3_1_12
+
+
+- name: "FIX | 3.1.12 Ensure syslog messages are not lost due to size"
+  ansible.builtin.shell: psql -t -c "alter system set syslog_split_messages = 'on'"
+  changed_when: pg15cis_postgres_syslog_split_messages_get.stdout != 'on'
+  register: result
+  failed_when: result.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  notify: pg_reload_conf
+  when:
+      - pg15cis_rule_3_1_12
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_3_1_12

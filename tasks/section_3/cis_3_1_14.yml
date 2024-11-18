@@ -1,0 +1,30 @@
+- name: "GET | 3.1.14 Get current correct messages are written to the server log"
+  ansible.builtin.shell: psql -t -c "show log_min_messages" | head -1 | xargs
+  changed_when: false
+  failed_when: pg15cis_postgres_log_min_messages_get.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_log_min_messages_get
+  when:
+      - pg15cis_rule_3_1_14
+  tags:
+      - level_1
+      - level_2
+      - get
+      - fix
+      - rule_3_1_14
+
+
+- name: "FIX | 3.1.14 Ensure the correct messages are written to the server log"
+  ansible.builtin.shell: psql -t -c "alter system set log_min_messages = '{{pg15cis_log_min_messages}}'"
+  changed_when: pg15cis_postgres_log_min_messages_get.stdout != pg15cis_log_min_messages
+  register: result
+  failed_when: result.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  notify: pg_reload_conf
+  when:
+      - pg15cis_rule_3_1_14
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_3_1_14

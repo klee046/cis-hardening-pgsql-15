@@ -26,6 +26,52 @@
 - name: "SECTION | 3.1.11 | Ensure syslog messages are not suppressed"
   ansible.builtin.import_tasks: cis_3_1_11.yml
 
+- name: "SECTION | 3.1.12 | Ensure syslog messages are not lost due to size"
+  ansible.builtin.import_tasks: cis_3_1_12.yml
+
+- name: "SECTION | 3.1.13 | Ensure the program name for PostgreSQL syslog messages is correct"
+  ansible.builtin.import_tasks: cis_3_1_13.yml
+
+- name: "SECTION | 3.1.14 | Ensure the correct messages are written to the server log"
+  ansible.builtin.import_tasks: cis_3_1_14.yml
+
+- name: "SECTION | 3.1.15 | Ensure the correct SQL statements generating errors are recorded"
+  ansible.builtin.import_tasks: cis_3_1_15.yml
+
+- name: "SECTION | 3.1.16 | Ensure 'debug_print_parse' is disabled"
+  ansible.builtin.import_tasks: cis_3_1_16.yml
+
+- name: "SECTION | 3.1.17 | Ensure 'debug_print_rewritten' is disabled"
+  ansible.builtin.import_tasks: cis_3_1_17.yml
+
+- name: "SECTION | 3.1.18 | Ensure 'debug_print_plan' is disabled"
+  ansible.builtin.import_tasks: cis_3_1_18.yml
+
+- name: "SECTION | 3.1.19 | Ensure 'debug_pretty_print' is disabled"
+  ansible.builtin.import_tasks: cis_3_1_19.yml
+
+- name: "SECTION | 3.1.20 | Ensure 'log_connections' is enabled"
+  ansible.builtin.import_tasks: cis_3_1_20.yml
+
+- name: "SECTION | 3.1.21 | Ensure 'log_disconnections' is enabled"
+  ansible.builtin.import_tasks: cis_3_1_21.yml
+
+- name: "SECTION | 3.1.22 | Ensure 'log_error_verbosity' is set correctly"
+  ansible.builtin.import_tasks: cis_3_1_22.yml
+
+- name: "SECTION | 3.1.23 | Ensure 'log_hostname' is set correctly"
+  ansible.builtin.import_tasks: cis_3_1_23.yml
+
+- name: "SECTION | 3.1.24 | Ensure 'log_line_prefix' is set correctly"
+  ansible.builtin.import_tasks: cis_3_1_24.yml
+
+- name: "SECTION | 3.1.25 | Ensure 'log_hostname' is set correctly"
+  ansible.builtin.import_tasks: cis_3_1_25.yml
+
+- name: "SECTION | 3.1.26 | Ensure 'log_hostname' is set correctly"
+  ansible.builtin.import_tasks: cis_3_1_26.yml
+
+
 - name: "SECTION | 3.2 | Ensure the PostgreSQL Audit Extension (pgAudit) is enabled"
   ansible.builtin.import_tasks: cis_3_2.yml
 

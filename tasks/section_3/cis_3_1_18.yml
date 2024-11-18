@@ -1,0 +1,30 @@
+- name: "GET | 3.1.18 Get current 'debug_print_plan' setting"
+  ansible.builtin.shell: psql -t -c "show debug_print_plan" | head -1 | xargs
+  changed_when: false
+  failed_when: pg15cis_postgres_debug_print_plan_get.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  register: pg15cis_postgres_debug_print_plan_get
+  when:
+      - pg15cis_rule_3_1_18
+  tags:
+      - level_1
+      - level_2
+      - get
+      - fix
+      - rule_3_1_18
+
+
+- name: "FIX | 3.1.18 Ensure 'debug_print_plan' is disabled"
+  ansible.builtin.shell: psql -t -c "alter system set debug_print_plan = 'off'"
+  changed_when: pg15cis_postgres_debug_print_plan_get.stdout != 'off'
+  register: result
+  failed_when: result.stderr
+  become_user: "{{ pg15cis_postgres_user }}"
+  notify: pg_reload_conf
+  when:
+      - pg15cis_rule_3_1_18
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_3_1_18
