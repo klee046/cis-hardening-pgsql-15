@@ -30,10 +30,41 @@
   tags:
       - pg15cis_section_4
 
+- name: Run CIS Section 6 Tasks
+  ansible.builtin.import_tasks: section_6/main.yml
+  when:
+      - pg15cis_section_6
+  tags:
+      - pg15cis_section_6
+
+- name: Run CIS Section 7 Tasks
+  ansible.builtin.import_tasks: section_7/main.yml
+  when:
+      - pg15cis_section_7
+  tags:
+      - pg15cis_section_7
+
+- name: Run CIS Section 8 Tasks
+  ansible.builtin.import_tasks: section_8/main.yml
+  when:
+      - pg15cis_section_8
+  tags:
+      - pg15cis_section_8
+
 - name: Output count and control IDs affected if any warnings have been detected during execution
   ansible.builtin.debug:
       msg: "You have {{ warn_count }} warning(s) that require attention and are related to the following benchmark ID(s) {{ warn_control_list }}"
   when: warn_count != 0
+  tags:
+      - always
+
+- name: "Check reboot status"
+  ansible.builtin.debug: 
+      msg: "Reboot flag: {{is_reboot_required}}"
+
+- name: Reboot systems after all tasks are run if required
+  ansible.builtin.shell: sleep 3; reboot
+  when: is_reboot_required
   tags:
       - always
 

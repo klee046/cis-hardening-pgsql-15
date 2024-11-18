@@ -1,0 +1,20 @@
+---
+- name: "FIX | 6.8 Ensure TLS is enabled and configured correctly"
+  ansible.builtin.lineinfile:
+      dest: "{{ pg15cis_config_file }}"
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      insertafter: "{{ item.insertafter }}"
+  notify: restart postgresql
+  with_items:
+      - { regexp: '^ssl =|^#ssl =', line: 'ssl = on', insertafter: '# - SSL -' }
+      - { regexp: '^ssl_cert_file =|^#ssl_cert_file =', line: "ssl_cert_file = '{{ pg15cis_ssl_cert_file }}'", insertafter: 'ssl = on' }
+      - { regexp: '^ssl_key_file =|ssl_key_file =', line: "ssl_key_file = '{{ pg15cis_ssl_key_file }}'", insertafter: 'ssl = on' }
+      - { regexp: '^ssl_min_protocol_version =|^#ssl_min_protocol_version =', line: 'ssl_min_protocol_version = {{ pg15cis_ssl_min_protocol_version }}', insertafter: 'ssl = on' }
+  when:
+      - pg15cis_rule_6_8
+  tags:
+      - level_1
+      - level_2
+      - get
+      - rule_6_8

@@ -1,0 +1,6 @@
+---
+- name: "SECTION | 6.7 | Ensure FIPS 140-2 OpenSSL Cryptography Is Used"
+  ansible.builtin.import_tasks: cis_6_7.yml
+
+- name: "SECTION | 6.8 | Ensure TLS is enabled and configured correctly"
+  ansible.builtin.import_tasks: cis_6_8.yml

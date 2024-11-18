@@ -1,0 +1,3 @@
+---
+- name: "SECTION | 8.2 | Ensure the backup and restore tool, 'pgBackRest', is installed and configured"
+  ansible.builtin.import_tasks: cis_8_2.yml

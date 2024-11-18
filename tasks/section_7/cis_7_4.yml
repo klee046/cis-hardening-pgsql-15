@@ -1,0 +1,40 @@
+---
+- name: "TASK | Ensure WAL archiving is configured and functional"
+  block:
+    - name: "GET | 7.4 Ensure WAL archiving is configured and functional"
+      ansible.builtin.shell: psql -t -c "SELECT name, setting FROM pg_settings WHERE name = 'archive_mode'" | head -1
+      changed_when: false
+      failed_when: pg15cis_archive_mode_get.stderr
+      become_user: "{{ pg15cis_postgres_user }}"
+      register: pg15cis_archive_mode_get
+
+    - name: "GET | 7.4 Ensure WAL archiving is configured and functional"
+      ansible.builtin.shell: psql -t -c "SELECT name, setting FROM pg_settings WHERE name = 'archive_command'" | head -1
+      changed_when: false
+      failed_when: pg15cis_archive_command_get.stderr
+      become_user: "{{ pg15cis_postgres_user }}"
+      register: pg15cis_archive_command_get
+
+    - name: "FIX | 7.4 Ensure WAL archiving is configured and functional"
+      ansible.builtin.shell: psql -t -c "alter system set archive_mode = 'on'"
+      changed_when: "'off' in pg15cis_archive_mode_get.stdout"
+      register: result
+      failed_when: result.stderr
+      become_user: "{{ pg15cis_postgres_user }}"
+      notify: restart postgresql
+
+    - name: "FIX | 7.4 Ensure WAL archiving is configured and functional"
+      ansible.builtin.shell: psql -t -c "alter system set archive_command = '{{pg15cis_archive_command}}'"
+      changed_when: "'disabled' in pg15cis_archive_command_get.stdout"
+      register: result
+      failed_when: result.stderr
+      become_user: "{{ pg15cis_postgres_user }}"
+      notify: restart postgresql
+
+  when:
+      - pg15cis_rule_7_4
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_7_4

@@ -1,0 +1,4 @@
+---
+- name: "SECTION | 7.4 | Ensure WAL archiving is configured and functional"
+  ansible.builtin.import_tasks: cis_7_4.yml
+

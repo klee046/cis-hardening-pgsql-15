@@ -144,9 +144,21 @@ pg15cis_log_timezone: 'Europe/Berlin'
 # Example for multiple items pg15cis_shared_preload_libraries: pgaudit,somethingelse
 pg15cis_shared_preload_libraries: pgaudit
 
-# pg15cis_pgaudit_log_types are the pgaudit log types that will be logged
+# 3.2
 # The options are READ, WRITE, FUNCTION, ROLE, DDL, and MISC. You can also have multiple types listed and separated by a comma with no spaces
 # Example pg15cis_pgaudit_log_types: ddl,write
 pg15cis_pgaudit_log_types: ddl,write
 
+# 6.7
+# Default value changed in tasks requiring system reboot
+is_reboot_required: false
 
+# 6.8
+# Ensure TLS is enabled and configured correctly
+pg15cis_ssl_cert_file: server.crt
+pg15cis_ssl_key_file: server.key
+pg15cis_ssl_min_protocol_version: TLSv1.3
+
+# 7.4
+# Ensure WAL archiving is configured and functional
+pg15cis_archive_command: rsync -e ssh -a %p postgres@remotehost:/var/lib/pgsql/WAL/%f

@@ -21,7 +21,7 @@
 
 - name: "PRELIM | Check Postgresql Default Service Name"
   ansible.builtin.debug:
-    msg: "Postgresql default servcixe name: {{ pg15cis_postgresql_service_default }}"
+    msg: "Postgresql default service name: {{ pg15cis_postgresql_service_default }}"
   tags: always
 
 - name: "PRELIM | Include Vars Based on OS Family"

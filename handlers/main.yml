@@ -9,3 +9,8 @@
   ansible.builtin.shell: psql -t -c "select pg_reload_conf()"
   become_user: "{{ pg15cis_postgres_user }}"
 
+- name: reboot system
+  ansible.builtin.shell: sleep 3; reboot
+  async: 15
+  poll: 0
+

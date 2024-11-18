@@ -1,0 +1,37 @@
+---
+- name: "TASK | 6.7 Ensure FIPS 140-2 OpenSSL Cryptography Is Used"
+
+  block:
+    - name: "GET | 6.7 | Check for FIPS capability"
+      ansible.builtin.shell: openssl version
+      changed_when: false
+      failed_when: false
+      register: pg15cis_fips_capability
+
+    - name: "GET | 6.7 Get if FIPS is enabled status"
+      ansible.builtin.shell: fips-mode-setup --check
+      changed_when: false
+      register: pg15cis_fips_check
+      failed_when: pg15cis_fips_check.stderr
+
+    - name: "FIX | 6.7 Ensure FIPS 140-2 OpenSSL Cryptography Is Used"
+      ansible.builtin.shell: fips-mode-setup --enable
+      notify: reboot system
+      when:
+          - "not pg15cis_fips_capability.stderr"
+          - "'disabled' in pg15cis_fips_check.stdout"
+
+    - name: "GET | 6.7  Ensure FIPS 140-2 OpenSSL Cryptography Is Used | Warning that system is not FIPS capable"
+      ansible.builtin.debug:
+          msg:
+              - "Warning! The system does not support FIPS 140-2, this is a finding."
+              - "Your system will not conform to control 6.7 of the PostgreSQL CIS. This is manual task."
+      when: pg15cis_fips_capability.stderr
+
+  when:
+      - pg15cis_rule_6_7
+  tags:
+      - level_1
+      - level_2
+      - get
+      - rule_6_7

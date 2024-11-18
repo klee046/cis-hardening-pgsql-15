@@ -1,0 +1,13 @@
+---
+- name: "FIX | 8.2 Ensure the backup and restore tool, 'pgBackRest', is installed and configured"
+  ansible.builtin.package:
+    name: pgbackrest
+    state: present
+  when:
+      - pg15cis_rule_8_2
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - rule_8_2
+
