@@ -58,7 +58,7 @@ pg15cis_rule_6_8: true
 
 # Section 7
 # Replication
-pg15cis_rule_7_4: true
+pg15cis_rule_7_4: false
 
 # Section 8
 
@@ -136,7 +136,7 @@ pg15cis_log_statement: 'ddl'
 
 # 3.1.26
 # Ensure 'log_timezone' is set correctly
-pg15cis_log_timezone: 'Europe/Berlin'
+pg15cis_log_timezone: 'GMT'
 
 # 3.2
 # pg15cis_shared_preload_libraries are the shared pre-load libraries
