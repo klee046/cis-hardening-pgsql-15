@@ -26,16 +26,16 @@ pg15cis_postgres_umask_source_filenames:
 #
 
 # 3.1.4 Destination directory for log files when log_destination is stderr or csvlog.
-pg15cis_postgres_log_directory: log
+pg15cis_postgres_log_directory: "/var/log/postgres"
 
 # 3.1.5 Log files filename format
-pg15cis_postgres_log_filename: "postgresql-%a.log"
+pg15cis_postgres_log_filename: "postgresql-%Y-%m-%d_%H%M%S.log"
 
 # 3.1.6 Log files mode
 pg15cis_postgres_log_file_mode: "0600"
 
 # 3.1.8 Ensure the maximum log file lifetime is set correctly
-pg15cis_postgres_log_rotation_age: "1d"
+pg15cis_postgres_log_rotation_age: "1h"
 
 # 3.1.9 Ensure the maximum log file size is set correctly
 pg15cis_postgres_log_rotation_size: "1GB"
